@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { chatService } from "../socket";
+import { clientSocket } from "../socket";
+import type { 
+    BaseResponse
+} from "@shared/models/Responses";
 
 export default function JoinLobby() {
     const [lobbyId, setLobbyId] = useState("");
@@ -17,7 +20,7 @@ export default function JoinLobby() {
 
         storeNick();
 
-        chatService.createLobby(lobbyId, nick).then(res => {
+        clientSocket.createLobby(lobbyId, nick).then((res: BaseResponse) => {
             if (res.ok) navigate(`/chat/${lobbyId}`);
             else alert(res.error);
         });
@@ -28,7 +31,7 @@ export default function JoinLobby() {
 
         storeNick();
 
-        chatService.joinLobby(lobbyId, nick).then(res => {
+        clientSocket.joinLobby(lobbyId, nick).then(res => {
             if (res.ok) navigate(`/chat/${lobbyId}`);
             else alert(res.error);
         });

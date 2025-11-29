@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
-import ChatService from "./services/ClientSocketHandler";
+import ClientSocketHandler from "./services/ClientSocketHandler";
 
 const socket: Socket = io();
-export const chatService = new ChatService(socket);
+export const clientSocket = new ClientSocketHandler(socket);
 
 export default socket;

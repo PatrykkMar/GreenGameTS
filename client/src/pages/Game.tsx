@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { chatService } from "../socket";
+import { clientSocket } from "../socket";
 import ChatWindow from "../components/ChatWindow";
 import UsersList from "../components/UsersList";
 
@@ -26,28 +26,28 @@ export default function Chat() {
         const handleUsers = (list: string[]) =>
             setUsers(list);
 
-        chatService.onSystem(handleSystem);
-        chatService.onUsers(handleUsers);
+        clientSocket.onSystem(handleSystem);
+        clientSocket.onUsers(handleUsers);
 
-        chatService.requestUserList(lobbyId).then(res => {
+        clientSocket.requestUserList(lobbyId).then(res => {
             if (res?.ok) setUsers(res.users);
         });
 
         return () => {
-            chatService.offSystem(handleSystem);
-            chatService.offUsers(handleUsers);
+            clientSocket.offSystem(handleSystem);
+            clientSocket.offUsers(handleUsers);
         };
     }, [lobbyId]);
 
     async function leaveLobby() {
         if (!lobbyId) return;
-        await chatService.leaveLobby(lobbyId);
+        await clientSocket.leaveLobby(lobbyId);
         navigate("/join");
     }
 
     function sendMsg(text: string) {
         if (!text || !lobbyId) return;
-        chatService.sendMessage(lobbyId, userNick, text);
+        clientSocket.sendMessage(lobbyId, userNick, text);
     }
 
     return (

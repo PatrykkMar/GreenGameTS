@@ -1,27 +1,27 @@
 export interface CreateLobbyRequest {
-  id: string;
-  nick: string;
+    id: string;
+    nick: string;
 }
 
 export interface JoinLobbyRequest {
-  id: string;
-  nick: string;
+    id: string;
+    nick: string;
 }
 
 export interface LeaveLobbyRequest {
-  id: string;
+    id: string;
 }
 
 export interface SendMsgRequest {
-  lobbyId: string;
-  author: string;
-  text: string;
+    lobbyId: string;
+    author: string;
+    text: string;
 }
 
 export interface GetMessagesRequest {
-  id: string;
+    id: string;
 }
 
 export interface GetUserListRequest {
-  id: string;
+    id: string;
 }

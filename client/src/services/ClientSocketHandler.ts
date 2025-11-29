@@ -1,3 +1,4 @@
+import type { BaseResponse } from "@shared/models/Responses";
 import { Socket } from "socket.io-client";
 
 export interface Message {
@@ -13,19 +14,19 @@ export default class ChatService {
         this.socket = socket;
     }
 
-    createLobby(id: string, nick: string): Promise<unknown> {
+    createLobby(id: string, nick: string): Promise<BaseResponse> {
         return new Promise(resolve => {
             this.socket.emit("createLobby", { id, nick }, resolve);
         });
     }
 
-    joinLobby(id: string, nick: string): Promise<unknown> {
+    joinLobby(id: string, nick: string): Promise<BaseResponse> {
         return new Promise(resolve => {
             this.socket.emit("joinLobby", { id, nick }, resolve);
         });
     }
 
-    leaveLobby(id: string): Promise<unknown> {
+    leaveLobby(id: string): Promise<BaseResponse> {
         return new Promise(resolve => {
             this.socket.emit("leaveLobby", { id }, resolve);
         });
@@ -35,13 +36,13 @@ export default class ChatService {
         this.socket.emit("sendMsg", { lobbyId, author, text });
     }
 
-    requestMessages(id: string): Promise<unknown> {
+    requestMessages(id: string): Promise<BaseResponse> {
         return new Promise(resolve => {
             this.socket.emit("requestMessages", { id }, resolve);
         });
     }
 
-    requestUserList(id: string): Promise<unknown> {
+    requestUserList(id: string): Promise<BaseResponse> {
         return new Promise(resolve => {
             this.socket.emit("requestUserList", { id }, resolve);
         });
