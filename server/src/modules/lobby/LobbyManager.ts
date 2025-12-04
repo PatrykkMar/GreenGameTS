@@ -5,8 +5,12 @@ import Lobby from "./Lobby";
 export default class LobbyManager {
   lobbies: Map<string, Lobby> = new Map();
 
-  getLobby(id: string): Lobby | undefined {
-    return this.lobbies.get(id);
+  getLobby(lobbyId: string): Lobby | undefined {
+    return this.lobbies.get(lobbyId);
+  }
+
+  getLobbyWithUser(userId: string): Lobby | undefined {
+    return [...this.lobbies.values()].find(lobby => lobby.users.has(userId));
   }
 
   getLobbyContainingUser(userId: string): Lobby | undefined {
@@ -27,6 +31,7 @@ export default class LobbyManager {
   removeUserFromAll(userId: string): void {
     for (const [id, lobby] of this.lobbies) {
       lobby.removeUser(userId);
+      lobby.addMessage({text: `${userId} left lobby`})
 
       if (lobby.users.size === 0) {
         this.lobbies.delete(id);

@@ -3,13 +3,13 @@ import { inject, injectable } from "tsyringe";
 import LobbyManager from "../modules/lobby/LobbyManager";
 import type { 
     CreateLobbyRequest, JoinLobbyRequest, LeaveLobbyRequest, 
-    SendMsgRequest, GetMessagesRequest, GetUserListRequest 
+    GetMessagesRequest, GetUserListRequest 
 } from "@shared/models/Requests";
 import type { BaseResponse } from "@shared/models/Responses";
-import { Message } from "../modules/lobby/Message";
+import { SystemMessage } from "@shared/models/SystemMessage";
 
 @injectable()
-export default class SocketHandler {
+export default class ServerSocketHandler {
     private io!: Server;
 
     constructor(@inject(LobbyManager) private lobbyManager: LobbyManager) {}
@@ -32,11 +32,7 @@ export default class SocketHandler {
             this.leaveLobby(socket, data, cb)
         );
 
-        socket.on("sendMsg", (data: SendMsgRequest) =>
-            this.sendMsg(socket, data)
-        );
-
-        socket.on("requestMessages", (data: GetMessagesRequest, cb: (res: BaseResponse<Message[]>) => void) =>
+        socket.on("requestMessages", (data: GetMessagesRequest, cb: (res: BaseResponse<SystemMessage[]>) => void) =>
             this.getMessages(socket, data, cb)
         );
 
@@ -47,62 +43,46 @@ export default class SocketHandler {
         socket.on("disconnect", () => this.disconnect(socket));
     }
 
-    private createLobby(socket: Socket, { id, nick }: CreateLobbyRequest, cb: (res: BaseResponse) => void) {
-        if (this.lobbyManager.getLobby(id)) return cb({ ok: false, error: "Lobby with that id exists." });
+    private createLobby(socket: Socket, { lobbyId, nick }: CreateLobbyRequest, cb: (res: BaseResponse) => void) {
+        if (this.lobbyManager.getLobby(lobbyId)) return cb({ ok: false, error: "Lobby with that id exists." });
 
-        const lobby = this.lobbyManager.createLobby(id);
+        const lobby = this.lobbyManager.createLobby(lobbyId);
         lobby.addUser(socket.id, nick);
-
-        socket.join(id);
-        socket.emit("history", lobby.messages);
-        this.io.to(id).emit("lobbyUsers", lobby.getUsersList());
-
+        lobby.addMessage({ text: `${nick} created lobby` });
+        socket.join(lobbyId);
         cb({ ok: true });
     }
 
-    private joinLobby(socket: Socket, { id, nick }: JoinLobbyRequest, cb: (res: BaseResponse) => void) {
-        const lobby = this.lobbyManager.getLobby(id);
+    private joinLobby(socket: Socket, { lobbyId, nick }: JoinLobbyRequest, cb: (res: BaseResponse) => void) {
+        const lobby = this.lobbyManager.getLobby(lobbyId);
         if (!lobby) return cb({ ok: false, error: "Lobby does not exist." });
 
         lobby.addUser(socket.id, nick);
-        socket.join(id);
-
-        socket.emit("history", lobby.messages);
-        socket.to(id).emit("systemMsg", { text: `${nick} joined the lobby` });
-        this.io.to(id).emit("lobbyUsers", lobby.getUsersList());
-
+        lobby.addMessage({ text: `${nick} joined the lobby` });
+        socket.join(lobbyId);
         cb({ ok: true });
     }
 
-    private leaveLobby(socket: Socket, { id }: LeaveLobbyRequest, cb: (res: BaseResponse) => void) {
-        const lobby = this.lobbyManager.getLobby(id);
+    private leaveLobby(socket: Socket, {  }: LeaveLobbyRequest, cb: (res: BaseResponse) => void) {
+        const lobby = this.lobbyManager.getLobbyWithUser(socket.id);
         if (!lobby) return cb({ ok: false });
 
         this.lobbyManager.removeUserFromAll(socket.id);
-        socket.leave(id);
+        socket.leave(socket.id);
 
-        this.io.to(id).emit("lobbyUsers", lobby.getUsersList());
+        this.io.to(socket.id).emit("lobbyUsers", lobby.getUsersList());
         cb({ ok: true });
     }
 
-    private sendMsg(socket: Socket, { lobbyId, author, text }: SendMsgRequest) {
-        const lobby = this.lobbyManager.getLobby(lobbyId);
-        if (!lobby) return;
-
-        const msg = new Message({ author, text, timestamp: Date.now() });
-        lobby.addMessage(msg);
-        this.io.to(lobbyId).emit("message", msg);
-    }
-
-    private getMessages(socket: Socket, { id }: GetMessagesRequest, cb: (res: BaseResponse<Message[]>) => void) {
-        const lobby = this.lobbyManager.getLobby(id);
+    private getMessages(socket: Socket, {  }: GetMessagesRequest, cb: (res: BaseResponse<SystemMessage[]>) => void) {
+        const lobby = this.lobbyManager.getLobbyWithUser(socket.id);
         if (!lobby) return cb({ ok: false, error: "Lobby does not exist." });
 
         cb({ ok: true, data: Array.from(lobby.messages) });
     }
 
-    private getUserList(socket: Socket, { id }: GetUserListRequest, cb: (res: BaseResponse<string[]>) => void) {
-        const lobby = this.lobbyManager.getLobby(id);
+    private getUserList(socket: Socket, {  }: GetUserListRequest, cb: (res: BaseResponse<string[]>) => void) {
+        const lobby = this.lobbyManager.getLobbyWithUser(socket.id);
         if (!lobby) return cb({ ok: false, error: "Lobby does not exist." });
 
         cb({ ok: true, data: lobby.getUsersList() });

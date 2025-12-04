@@ -1,13 +1,8 @@
 import type { BaseResponse } from "@shared/models/Responses";
 import { Socket } from "socket.io-client";
+import type { SystemMessage } from "@shared/models/SystemMessage";
 
-export interface Message {
-    lobbyId: string;
-    author: string;
-    text: string;
-}
-
-export default class ChatService {
+export default class ClientSocketHandler {
     private socket: Socket;
 
     constructor(socket: Socket) {
@@ -20,52 +15,41 @@ export default class ChatService {
         });
     }
 
-    joinLobby(id: string, nick: string): Promise<BaseResponse> {
+    joinLobby(lobbyId: string, nick: string): Promise<BaseResponse> {
         return new Promise(resolve => {
-            this.socket.emit("joinLobby", { id, nick }, resolve);
+            this.socket.emit("joinLobby", { id: lobbyId, nick }, resolve);
         });
     }
 
-    leaveLobby(id: string): Promise<BaseResponse> {
+    leaveLobby(): Promise<BaseResponse> {
         return new Promise(resolve => {
-            this.socket.emit("leaveLobby", { id }, resolve);
+            this.socket.emit("leaveLobby", {  }, resolve);
         });
     }
 
-    sendMessage(lobbyId: string, author: string, text: string): void {
-        this.socket.emit("sendMsg", { lobbyId, author, text });
-    }
-
-    requestMessages(id: string): Promise<BaseResponse> {
+    requestMessages(): Promise<BaseResponse<SystemMessage[]>> {
         return new Promise(resolve => {
-            this.socket.emit("requestMessages", { id }, resolve);
+            this.socket.emit("requestMessages", {  }, resolve);
         });
     }
 
-    requestUserList(id: string): Promise<BaseResponse> {
+    requestUserList(): Promise<BaseResponse<string[]>> {
         return new Promise(resolve => {
-            this.socket.emit("requestUserList", { id }, resolve);
+            this.socket.emit("requestUserList", {  }, resolve);
         });
     }
 
-    onMessage(handler: (msg: Message) => void): void {
-        this.socket.on("message", handler);
-    }
-    offMessage(handler: (msg: Message) => void): void {
-        this.socket.off("message", handler);
-    }
-
-    onSystem(handler: (systemMsg: string) => void): void {
+    onSystemMesages(handler: (systemMsg: SystemMessage) => void): void {
         this.socket.on("systemMsg", handler);
     }
-    offSystem(handler: (systemMsg: string) => void): void {
+    offSystemMessages(handler: (systemMsg: SystemMessage) => void): void {
         this.socket.off("systemMsg", handler);
     }
 
-    onHistory(handler: (messages: Message[]) => void): void {
+    onHistory(handler: (messages: SystemMessage[]) => void): void {
         this.socket.on("history", handler);
     }
-    offHistory(handler: (messages: Message[]) => void): void {
+    offHistory(handler: (messages: SystemMessage[]) => void): void {
         this.socket.off("history", handler);
     }
 

@@ -3,7 +3,7 @@ import express from "express";
 import http from "http";
 import { Server as SocketIOServer, Socket } from "socket.io";
 import path from "path";
-import SocketHandler from "./socket/SocketHandler";
+import ServerSocketHandler from "./socket/ServerSocketHandler";
 
 @injectable()
 export default class AppServer {
@@ -12,7 +12,7 @@ export default class AppServer {
     private io = new SocketIOServer(this.httpServer);
 
     constructor(
-        @inject(SocketHandler) private socketHandler: SocketHandler
+        @inject(ServerSocketHandler) private socketHandler: ServerSocketHandler
     ) {}
 
     init() {

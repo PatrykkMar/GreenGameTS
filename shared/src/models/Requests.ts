@@ -1,15 +1,14 @@
 export interface CreateLobbyRequest {
-    id: string;
+    lobbyId: string;
     nick: string;
 }
 
 export interface JoinLobbyRequest {
-    id: string;
+    lobbyId: string;
     nick: string;
 }
 
 export interface LeaveLobbyRequest {
-    id: string;
 }
 
 export interface SendMsgRequest {
@@ -19,9 +18,9 @@ export interface SendMsgRequest {
 }
 
 export interface GetMessagesRequest {
-    id: string;
+
 }
 
 export interface GetUserListRequest {
-    id: string;
+
 }

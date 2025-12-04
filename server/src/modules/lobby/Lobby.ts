@@ -1,10 +1,10 @@
-import type { Message } from "./Message";
+import { SystemMessage } from "@shared/models/SystemMessage";
 import User from "./User";
 
 export default class Lobby {
   id: string;
   users: Map<string, User>;
-  messages: Set<Message>;
+  messages: Set<SystemMessage>;
 
   constructor(id: string) {
     this.id = id;
@@ -30,7 +30,7 @@ export default class Lobby {
     return this.users.get(userId) ?? null;
   }
 
-  addMessage(msg: Message): void {
+  addMessage(msg: SystemMessage): void {
     this.messages.add(msg);
   }
 }
