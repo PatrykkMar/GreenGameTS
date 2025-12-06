@@ -1,0 +1,74 @@
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+
+    .container-box {
+      background-color: #e6f2e6;
+      width: 80vw;
+      max-width: 500px;
+      aspect-ratio: 1;
+      margin: 0 auto;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 5%;
+    }
+
+    .tile {
+      background-color: #144d6f;
+      width: 100%;
+      height: 100%;
+    }
+
+    .input-box {
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      border: none;
+      text-align: center;
+      position: absolute;
+      z-index: 10;
+    }
+
+    .top {
+      top: -5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40%;
+    }
+
+    .bottom {
+      bottom: -5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40%;
+    }
+
+    .left {
+      top: 50%;
+      left: -5%;
+      transform: translateY(-50%);
+      width: 30%;
+    }
+
+    .right {
+      top: 50%;
+      right: -5%;
+      transform: translateY(-50%);
+      width: 30%;
+    }
+
+    .ready-btn {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 400px) {
+      .top, .bottom {
+        width: 50%;
+      }
+      .left, .right {
+        width: 35%;
+      }
+    }

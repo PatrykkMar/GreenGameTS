@@ -3,7 +3,6 @@ import './App.css'
 import Home from './pages/Home';
 import JoinLobby from './pages/JoinLobby';
 import Game from './pages/Game';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
     return (

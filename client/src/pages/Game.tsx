@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { clientSocket } from "../socket";
 import SystemMessageWindow from "../components/SystemMessageWindow";
 import UsersList from "../components/UsersList";
+import Board from "../components/Board";
 
 export default function Game() {
     const { lobbyId } = useParams();
@@ -25,6 +26,11 @@ export default function Game() {
                 <button className="btn btn-outline-danger mb-3" onClick={leaveLobby}>
                     Leave lobby
                 </button>
+            </div>
+            <div className="p-8">
+                <Board
+
+                />
             </div>
         </div>
     );
