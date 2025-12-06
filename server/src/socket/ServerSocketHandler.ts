@@ -1,6 +1,5 @@
 import { Server, Socket } from "socket.io";
 import { inject, injectable } from "tsyringe";
-import LobbyManager from "../modules/lobby/LobbyManager";
 import type { 
     CreateLobbyRequest, JoinLobbyRequest, LeaveLobbyRequest, 
     GetMessagesRequest, GetUserListRequest, 
@@ -10,16 +9,17 @@ import type {
 } from "@shared/models/Requests";
 import type { BaseResponse } from "@shared/models/Responses";
 import { SystemMessage } from "@shared/models/SystemMessage";
-import GameFactory from "../modules/game/GameFactory";
-import Board from "../modules/game/Board";
+import type Board from "../modules/game/Board";
+import LobbyService from "../services/LobbyService";
+import GameService from "../services/GameService";
 
 @injectable()
 export default class ServerSocketHandler {
     private io!: Server;
 
     constructor(
-        @inject(LobbyManager) private lobbyManager: LobbyManager,
-        @inject(GameFactory) private gameFactory: GameFactory
+        @inject(LobbyService) private lobbyService: LobbyService,
+        @inject(GameService) private gameService: GameService
     ) {}
 
     attach(io: Server) {
@@ -48,77 +48,71 @@ export default class ServerSocketHandler {
             this.getUserList(socket, data, cb)
         );
 
+        socket.on("declareReady", (data: DeclareReadyRequest, cb: (res: BaseResponse<Board>) => void) =>
+            this.declareReady(socket, data, cb)
+        );
+
+        socket.on("rotateTile", (data: RotateTileRequest, cb: (res: BaseResponse<Board>) => void) =>
+            this.rotateTile(socket, data, cb)
+        );
+
+        socket.on("check", (data: CheckRequest, cb: (res: BaseResponse<string[]>) => void) =>
+            this.check(socket, data, cb)
+        );
+
         socket.on("disconnect", () => this.disconnect(socket));
     }
 
-    //lobby methods
+    // Lobby methods
 
     private createLobby(socket: Socket, { lobbyId, nick }: CreateLobbyRequest, cb: (res: BaseResponse) => void) {
-        if (this.lobbyManager.getLobby(lobbyId)) return cb({ ok: false, error: "Lobby with that id exists." });
-
-        const lobby = this.lobbyManager.createLobby(lobbyId);
-        lobby.addUser(socket.id, nick);
-        lobby.addMessage({ text: `${nick} created lobby` });
-        lobby.createGame(this.gameFactory);
-        socket.join(lobbyId);
-        cb({ ok: true });
+        const res = this.lobbyService.createLobby(lobbyId, socket.id, nick);
+        if (res.ok) socket.join(lobbyId);
+        cb(res);
     }
 
     private joinLobby(socket: Socket, { lobbyId, nick }: JoinLobbyRequest, cb: (res: BaseResponse) => void) {
-        const lobby = this.lobbyManager.getLobby(lobbyId);
-        if (!lobby) return cb({ ok: false, error: "Lobby does not exist." });
-
-        lobby.addUser(socket.id, nick);
-        lobby.addMessage({ text: `${nick} joined the lobby` });
-        socket.join(lobbyId);
-        cb({ ok: true });
+        const res = this.lobbyService.joinLobby(lobbyId, socket.id, nick);
+        if (res.ok) socket.join(lobbyId);
+        cb(res);
     }
 
-    private leaveLobby(socket: Socket, {  }: LeaveLobbyRequest, cb: (res: BaseResponse) => void) {
-        const lobby = this.lobbyManager.getLobbyWithUser(socket.id);
-        if (!lobby) return cb({ ok: false });
-
-        this.lobbyManager.removeUserFromAll(socket.id);
+    private leaveLobby(socket: Socket, request: LeaveLobbyRequest, cb: (res: BaseResponse) => void) {
+        const res = this.lobbyService.leaveLobby(socket.id);
         socket.leave(socket.id);
-
-        this.io.to(socket.id).emit("lobbyUsers", lobby.getUsersList());
-        cb({ ok: true });
+        cb(res);
     }
 
-    private getMessages(socket: Socket, {  }: GetMessagesRequest, cb: (res: BaseResponse<SystemMessage[]>) => void) {
-        const lobby = this.lobbyManager.getLobbyWithUser(socket.id);
-        if (!lobby) return cb({ ok: false, error: "Lobby does not exist." });
-
-        cb({ ok: true, data: Array.from(lobby.messages) });
+    private getMessages(socket: Socket, request: GetMessagesRequest, cb: (res: BaseResponse<SystemMessage[]>) => void) {
+        const res = this.lobbyService.getMessages(socket.id);
+        cb(res);
     }
 
-    private getUserList(socket: Socket, {  }: GetUserListRequest, cb: (res: BaseResponse<string[]>) => void) {
-        const lobby = this.lobbyManager.getLobbyWithUser(socket.id);
-        if (!lobby) return cb({ ok: false, error: "Lobby does not exist." });
-
-        cb({ ok: true, data: lobby.getUsersList() });
+    private getUserList(socket: Socket, request: GetUserListRequest, cb: (res: BaseResponse<string[]>) => void) {
+        const res = this.lobbyService.getUserList(socket.id);
+        cb(res);
     }
 
-    //game methods
+    // Game methods
 
-    private declareReady(socket: Socket, {  }: DeclareReadyRequest, cb: (res: BaseResponse<Board>) => void) {
+    private declareReady(socket: Socket, request: DeclareReadyRequest, cb: (res: BaseResponse<Board>) => void) {
         //TODO
-        cb({ ok: true });
+        cb(this.gameService.declareReady(request));
     }
 
-    private rotateTile(socket: Socket, {  }: RotateTileRequest, cb: (res: BaseResponse<Board>) => void) {
+    private rotateTile(socket: Socket, request: RotateTileRequest, cb: (res: BaseResponse<Board>) => void) {
         //TODO
-        cb({ ok: true });
+        cb(this.gameService.rotateTile(request));
     }
 
-    private check(socket: Socket, {  }: CheckRequest, cb: (res: BaseResponse<string[]>) => void) {
+    private check(socket: Socket, request: CheckRequest, cb: (res: BaseResponse<string[]>) => void) {
         //TODO
-        cb({ ok: true });
+        cb(this.gameService.check(request));
     }
 
-    //other
+    // Other
 
     private disconnect(socket: Socket) {
-        this.lobbyManager.removeUserFromAll(socket.id);
+        this.lobbyService.leaveLobby(socket.id);
     }
 }

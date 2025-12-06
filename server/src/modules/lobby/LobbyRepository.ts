@@ -3,7 +3,7 @@ import Lobby from "./Lobby";
 import GameFactory from "../game/GameFactory";
 
 @injectable()
-export default class LobbyManager {
+export default class LobbyRepository {
 
   lobbies: Map<string, Lobby> = new Map();
 
