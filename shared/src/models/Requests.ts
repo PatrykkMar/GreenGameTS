@@ -24,3 +24,15 @@ export interface GetMessagesRequest {
 export interface GetUserListRequest {
 
 }
+
+export interface DeclareReadyRequest {
+
+}
+
+export interface RotateTileRequest {
+    tileId: number
+}
+
+export interface CheckRequest {
+    inputs: string[]
+}

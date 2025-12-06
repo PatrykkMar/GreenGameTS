@@ -3,11 +3,15 @@ import { inject, injectable } from "tsyringe";
 import LobbyManager from "../modules/lobby/LobbyManager";
 import type { 
     CreateLobbyRequest, JoinLobbyRequest, LeaveLobbyRequest, 
-    GetMessagesRequest, GetUserListRequest 
+    GetMessagesRequest, GetUserListRequest, 
+    RotateTileRequest,
+    DeclareReadyRequest,
+    CheckRequest
 } from "@shared/models/Requests";
 import type { BaseResponse } from "@shared/models/Responses";
 import { SystemMessage } from "@shared/models/SystemMessage";
 import GameFactory from "../modules/game/GameFactory";
+import Board from "../modules/game/Board";
 
 @injectable()
 export default class ServerSocketHandler {
@@ -46,6 +50,8 @@ export default class ServerSocketHandler {
 
         socket.on("disconnect", () => this.disconnect(socket));
     }
+
+    //lobby methods
 
     private createLobby(socket: Socket, { lobbyId, nick }: CreateLobbyRequest, cb: (res: BaseResponse) => void) {
         if (this.lobbyManager.getLobby(lobbyId)) return cb({ ok: false, error: "Lobby with that id exists." });
@@ -92,6 +98,25 @@ export default class ServerSocketHandler {
 
         cb({ ok: true, data: lobby.getUsersList() });
     }
+
+    //game methods
+
+    private declareReady(socket: Socket, {  }: DeclareReadyRequest, cb: (res: BaseResponse<Board>) => void) {
+        //TODO
+        cb({ ok: true });
+    }
+
+    private rotateTile(socket: Socket, {  }: RotateTileRequest, cb: (res: BaseResponse<Board>) => void) {
+        //TODO
+        cb({ ok: true });
+    }
+
+    private check(socket: Socket, {  }: CheckRequest, cb: (res: BaseResponse<string[]>) => void) {
+        //TODO
+        cb({ ok: true });
+    }
+
+    //other
 
     private disconnect(socket: Socket) {
         this.lobbyManager.removeUserFromAll(socket.id);

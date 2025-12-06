@@ -1,8 +1,9 @@
 import { WordGroup } from '@shared/models/WordGroup';
 import fs from 'fs';
 import path from 'path';
+import { injectable } from 'tsyringe';
 
-
+@injectable()
 export class WordsGroupService {
   private wordGroups: WordGroup[] = [];
 
