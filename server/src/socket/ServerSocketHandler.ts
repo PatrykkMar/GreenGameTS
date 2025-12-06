@@ -7,12 +7,16 @@ import type {
 } from "@shared/models/Requests";
 import type { BaseResponse } from "@shared/models/Responses";
 import { SystemMessage } from "@shared/models/SystemMessage";
+import GameFactory from "../modules/game/GameFactory";
 
 @injectable()
 export default class ServerSocketHandler {
     private io!: Server;
 
-    constructor(@inject(LobbyManager) private lobbyManager: LobbyManager) {}
+    constructor(
+        @inject(LobbyManager) private lobbyManager: LobbyManager,
+        @inject(GameFactory) private gameFactory: GameFactory
+    ) {}
 
     attach(io: Server) {
         this.io = io;
@@ -49,6 +53,7 @@ export default class ServerSocketHandler {
         const lobby = this.lobbyManager.createLobby(lobbyId);
         lobby.addUser(socket.id, nick);
         lobby.addMessage({ text: `${nick} created lobby` });
+        lobby.createGame(this.gameFactory);
         socket.join(lobbyId);
         cb({ ok: true });
     }

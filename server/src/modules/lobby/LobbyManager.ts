@@ -1,8 +1,10 @@
 import { injectable } from "tsyringe";
 import Lobby from "./Lobby";
+import GameFactory from "../game/GameFactory";
 
 @injectable()
 export default class LobbyManager {
+
   lobbies: Map<string, Lobby> = new Map();
 
   getLobby(lobbyId: string): Lobby | undefined {

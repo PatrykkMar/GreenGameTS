@@ -1,10 +1,7 @@
+import { WordGroup } from '@shared/models/WordGroup';
 import fs from 'fs';
 import path from 'path';
 
-interface WordGroup {
-  id: number;
-  words: string[];
-}
 
 export class WordsGroupService {
   private wordGroups: WordGroup[] = [];
