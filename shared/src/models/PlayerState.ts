@@ -1,5 +1,6 @@
-enum PlayerState
+export enum PlayerState
 {
-    Draft,
-    InGame
+    Draft, //player writes his words
+    CheckedPlayer, //player who is checked 
+    CheckingPlayer //player checking one player
 }

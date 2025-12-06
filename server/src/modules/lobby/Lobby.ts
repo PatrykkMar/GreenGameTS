@@ -1,10 +1,13 @@
 import { SystemMessage } from "@shared/models/SystemMessage";
 import User from "./User";
+import Game from "../game/Game";
+import GameFactory from "../game/GameFactory";
 
 export default class Lobby {
   id: string;
   users: Map<string, User>;
   messages: Set<SystemMessage>;
+  game?: Game;
 
   constructor(id: string) {
     this.id = id;
@@ -32,5 +35,9 @@ export default class Lobby {
 
   addMessage(msg: SystemMessage): void {
     this.messages.add(msg);
+  }
+
+  createGame(factory: GameFactory) {
+    this.game = factory.createFromLobby(this);
   }
 }
