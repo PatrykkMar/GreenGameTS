@@ -91,6 +91,21 @@
   margin-top: 20px;
 }
 
+.rotate-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  background-color: #ff9800;
+  color: white;
+  font-weight: bold;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: transform 0.3s ease; 
+}
+
 @media (max-width: 400px) {
   .input-box.top,
   .input-box.bottom {
