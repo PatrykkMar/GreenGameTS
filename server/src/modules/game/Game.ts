@@ -46,7 +46,7 @@ export default class Game
         //set game and players states to to appropriate ones
         //return board to check
         //returns board
-        return new Board();
+        return Board.getTestBoard();
     }
 
     rotateTile(tileId: number) : Board
@@ -56,7 +56,7 @@ export default class Game
         //find tile
         //increase rotation by one
         //returns board
-        return new Board();
+        return Board.getTestBoard();
     }
 
     check(tileId: number) : boolean

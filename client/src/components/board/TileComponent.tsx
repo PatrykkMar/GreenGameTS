@@ -9,7 +9,7 @@ interface TileProps {
   };
 }
 
-export default function Tile({ labels }: TileProps) {
+export default function TileComponent({ labels }: TileProps) {
   const [rotation, setRotation] = useState(0);
 
   const handleRotate = () => {
