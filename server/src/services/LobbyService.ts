@@ -1,14 +1,15 @@
 import { inject, injectable } from "tsyringe";
-import LobbyManager from "../modules/lobby/LobbyRepository";
+import LobbyRepository from "../modules/lobby/LobbyRepository";
 import GameFactory from "../modules/game/GameFactory";
 import { BaseResponse } from "@shared/models/Responses";
 import { SystemMessage } from "@shared/models/SystemMessage";
+import Board from "../modules/game/Board";
 
 @injectable()
 export default class LobbyService {
 
     constructor(
-        @inject(LobbyManager) private lobbyManager: LobbyManager,
+        @inject(LobbyRepository) private lobbyManager: LobbyRepository,
         @inject(GameFactory) private gameFactory: GameFactory
     ) {}
 
@@ -33,6 +34,11 @@ export default class LobbyService {
 
         lobby.addUser(userId, nick);
         lobby.addMessage({ text: `${nick} joined the lobby` });
+        
+        if(lobby.game)
+        {
+            lobby.game.addPlayer(userId);
+        }
 
         return { ok: true };
     }

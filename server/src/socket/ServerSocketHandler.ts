@@ -83,16 +83,6 @@ export default class ServerSocketHandler {
         cb(res);
     }
 
-    private getMessages(socket: Socket, request: GetMessagesRequest, cb: (res: BaseResponse<SystemMessage[]>) => void) {
-        const res = this.lobbyService.getMessages(socket.id);
-        cb(res);
-    }
-
-    private getUserList(socket: Socket, request: GetUserListRequest, cb: (res: BaseResponse<string[]>) => void) {
-        const res = this.lobbyService.getUserList(socket.id);
-        cb(res);
-    }
-
     // Game methods
 
     private declareReady(socket: Socket, request: DeclareReadyRequest, cb: (res: BaseResponse<Board>) => void) {
@@ -108,6 +98,23 @@ export default class ServerSocketHandler {
     private check(socket: Socket, request: CheckRequest, cb: (res: BaseResponse<string[]>) => void) {
         //TODO
         cb(this.gameService.check(request));
+    }
+
+    //Component methods
+    
+    private getMessages(socket: Socket, request: GetMessagesRequest, cb: (res: BaseResponse<SystemMessage[]>) => void) {
+        const res = this.lobbyService.getMessages(socket.id);
+        cb(res);
+    }
+
+    private getUserList(socket: Socket, request: GetUserListRequest, cb: (res: BaseResponse<string[]>) => void) {
+        const res = this.lobbyService.getUserList(socket.id);
+        cb(res);
+    }
+
+    private getBoard(socket: Socket, request: GetUserListRequest, cb: (res: BaseResponse<Board>) => void) {
+        const res = this.gameService.getBoard(socket.id);
+        cb(res);
     }
 
     // Other

@@ -1,7 +1,8 @@
-import { WordGroup } from '@shared/models/WordGroup';
+import { WordGroup } from "./WordGroup";
+
 export default class BoardTile
 {
     public id: number = 0;
-    public wordGroup!: WordGroup;
+    public words: string[] = [];
     public rotation: number = 0;
 }
