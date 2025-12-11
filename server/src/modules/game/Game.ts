@@ -1,8 +1,7 @@
-import { GameState } from "@shared/models/GameState";
 import Player from "./Player";
 import { PlayerState } from "@shared/models/PlayerState";
-import Board from "./Board";
-import Lobby from "../lobby/Lobby";
+import Board from "@shared/models/Board";
+import { GameState } from "@shared/models/GameState";
 
 export default class Game
 {
@@ -46,7 +45,7 @@ export default class Game
         //set game and players states to to appropriate ones
         //return board to check
         //returns board
-        return Board.getTestBoard();
+        return Board.getEmptyBoard();
     }
 
     rotateTile(tileId: number) : Board
@@ -56,7 +55,7 @@ export default class Game
         //find tile
         //increase rotation by one
         //returns board
-        return Board.getTestBoard();
+        return Board.getEmptyBoard();
     }
 
     check(tileId: number) : boolean

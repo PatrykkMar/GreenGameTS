@@ -1,6 +1,7 @@
 import type { BaseResponse } from "@shared/models/Responses";
 import { Socket } from "socket.io-client";
 import type { SystemMessage } from "@shared/models/SystemMessage";
+import Board from "@shared/models/Board";
 
 export default class ClientSocketHandler {
     private socket: Socket;
@@ -39,6 +40,12 @@ export default class ClientSocketHandler {
         });
     }
 
+    requestBoard(): Promise<BaseResponse<Board>> {
+        return new Promise(resolve => {
+            this.socket.emit("requestBoard", {  }, resolve);
+        });
+    }
+
     onSystemMesages(handler: (systemMsg: SystemMessage) => void): void {
         this.socket.on("systemMsg", handler);
     }
@@ -57,6 +64,13 @@ export default class ClientSocketHandler {
         this.socket.on("lobbyUsers", handler);
     }
     offUsers(handler: (users: string[]) => void): void {
+        this.socket.off("lobbyUsers", handler);
+    }
+
+    onBoard(handler: (board: Board) => void): void {
+        this.socket.on("lobbyUsers", handler);
+    }
+    offBoard(handler: (board: Board) => void): void {
         this.socket.off("lobbyUsers", handler);
     }
 }

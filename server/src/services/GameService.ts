@@ -1,19 +1,17 @@
-import { CheckRequest, RotateTileRequest } from './../../../shared/src/models/Requests';
 import { inject, injectable } from "tsyringe";
-
 import { BaseResponse } from "@shared/models/Responses";
-import Board from "../modules/game/Board";
-import { DeclareReadyRequest } from "@shared/models/Requests";
+import { CheckRequest, DeclareReadyRequest, RotateTileRequest } from "@shared/models/Requests";
 import LobbyRepository from '../modules/lobby/LobbyRepository';
-import { GameState } from '@shared/models/GameState';
-import { WordsGroupService } from '../modules/words/WordGroupsService';
+import { WordsGroupRepository } from '../modules/words/WordGroupRepository';
+import Board from "@shared/models/Board";
+import { GameState } from "@shared/models/GameState";
 
 @injectable()
 export default class GameService {
 
     constructor(
         @inject(LobbyRepository) private lobbyManager: LobbyRepository,
-        @inject(WordsGroupService)private wordsGroupService: WordsGroupService
+        @inject(WordsGroupRepository)private wordsGroupService: WordsGroupRepository
     ) {}
 
     declareReady(request: DeclareReadyRequest): BaseResponse<Board> {

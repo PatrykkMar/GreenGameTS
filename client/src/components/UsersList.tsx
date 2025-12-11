@@ -17,7 +17,6 @@ export default function UsersList() {
 
         clientSocket.onUsers(handleUserList);
 
-        // 3. Sprzątanie
         return () => {
             clientSocket.offUsers(handleUserList);
         };

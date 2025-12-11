@@ -3,7 +3,7 @@ import LobbyRepository from "../modules/lobby/LobbyRepository";
 import GameFactory from "../modules/game/GameFactory";
 import { BaseResponse } from "@shared/models/Responses";
 import { SystemMessage } from "@shared/models/SystemMessage";
-import Board from "../modules/game/Board";
+import Board from "../../../shared/src/models/Board";
 
 @injectable()
 export default class LobbyService {
