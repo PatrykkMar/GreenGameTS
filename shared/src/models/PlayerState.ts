@@ -1,4 +1,4 @@
-export enum PlayerState
+export const enum PlayerState
 {
     Draft, //player writes his words
     CheckedPlayer, //player who is checked 

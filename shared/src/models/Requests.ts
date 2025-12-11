@@ -25,6 +25,10 @@ export interface GetUserListRequest {
 
 }
 
+export interface GetBoardRequest {
+
+}
+
 export interface DeclareReadyRequest {
 
 }

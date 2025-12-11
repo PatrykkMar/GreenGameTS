@@ -5,13 +5,14 @@ import type {
     GetMessagesRequest, GetUserListRequest, 
     RotateTileRequest,
     DeclareReadyRequest,
-    CheckRequest
+    CheckRequest,
+    GetBoardRequest
 } from "@shared/models/Requests";
 import type { BaseResponse } from "@shared/models/Responses";
 import { SystemMessage } from "@shared/models/SystemMessage";
-import type Board from "../modules/game/Board";
 import LobbyService from "../services/LobbyService";
 import GameService from "../services/GameService";
+import Board from "@shared/models/Board";
 
 @injectable()
 export default class ServerSocketHandler {
@@ -28,39 +29,55 @@ export default class ServerSocketHandler {
     }
 
     private onConnection(socket: Socket) {
-        socket.on("createLobby", (data: CreateLobbyRequest, cb: (res: BaseResponse) => void) =>
-            this.createLobby(socket, data, cb)
-        );
+        socket.on("createLobby", (data: CreateLobbyRequest, cb: (res: BaseResponse) => void) => {
+            console.log("[ServerSocketHandler] createLobby requested");
+            this.createLobby(socket, data, cb);
+        });
 
-        socket.on("joinLobby", (data: JoinLobbyRequest, cb: (res: BaseResponse) => void) =>
-            this.joinLobby(socket, data, cb)
-        );
+        socket.on("joinLobby", (data: JoinLobbyRequest, cb: (res: BaseResponse) => void) => {
+            console.log("[ServerSocketHandler] joinLobby requested");
+            this.joinLobby(socket, data, cb);
+        });
 
-        socket.on("leaveLobby", (data: LeaveLobbyRequest, cb: (res: BaseResponse) => void) =>
-            this.leaveLobby(socket, data, cb)
-        );
+        socket.on("leaveLobby", (data: LeaveLobbyRequest, cb: (res: BaseResponse) => void) => {
+            console.log("[ServerSocketHandler] leaveLobby requested");
+            this.leaveLobby(socket, data, cb);
+        });
 
-        socket.on("requestMessages", (data: GetMessagesRequest, cb: (res: BaseResponse<SystemMessage[]>) => void) =>
-            this.getMessages(socket, data, cb)
-        );
+        socket.on("requestMessages", (data: GetMessagesRequest, cb: (res: BaseResponse<SystemMessage[]>) => void) => {
+            console.log("[ServerSocketHandler] requestMessages requested");
+            this.getMessages(socket, data, cb);
+        });
 
-        socket.on("requestUserList", (data: GetUserListRequest, cb: (res: BaseResponse<string[]>) => void) =>
-            this.getUserList(socket, data, cb)
-        );
+        socket.on("requestUserList", (data: GetUserListRequest, cb: (res: BaseResponse<string[]>) => void) => {
+            console.log("[ServerSocketHandler] requestUserList requested");
+            this.getUserList(socket, data, cb);
+        });
 
-        socket.on("declareReady", (data: DeclareReadyRequest, cb: (res: BaseResponse<Board>) => void) =>
-            this.declareReady(socket, data, cb)
-        );
+        socket.on("requestBoard", (data: GetBoardRequest, cb: (res: BaseResponse<Board>) => void) => {
+            console.log("[ServerSocketHandler] requestBoard requested");
+            this.getBoard(socket, data, cb);
+        });
 
-        socket.on("rotateTile", (data: RotateTileRequest, cb: (res: BaseResponse<Board>) => void) =>
-            this.rotateTile(socket, data, cb)
-        );
+        socket.on("declareReady", (data: DeclareReadyRequest, cb: (res: BaseResponse<Board>) => void) => {
+            console.log("[ServerSocketHandler] declareReady requested");
+            this.declareReady(socket, data, cb);
+        });
 
-        socket.on("check", (data: CheckRequest, cb: (res: BaseResponse<string[]>) => void) =>
-            this.check(socket, data, cb)
-        );
+        socket.on("rotateTile", (data: RotateTileRequest, cb: (res: BaseResponse<Board>) => void) => {
+            console.log("[ServerSocketHandler] rotateTile requested");
+            this.rotateTile(socket, data, cb);
+        });
 
-        socket.on("disconnect", () => this.disconnect(socket));
+        socket.on("check", (data: CheckRequest, cb: (res: BaseResponse<string[]>) => void) => {
+            console.log("[ServerSocketHandler] check requested");
+            this.check(socket, data, cb);
+        });
+
+        socket.on("disconnect", () => {
+            console.log("[ServerSocketHandler] disconnect requested");
+            this.disconnect(socket);
+        });
     }
 
     // Lobby methods

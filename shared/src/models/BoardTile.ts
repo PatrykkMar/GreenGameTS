@@ -1,8 +1,6 @@
-import { WordGroup } from "./WordGroup";
-
 export default class BoardTile
 {
-    public id: number = 0;
-    public words: string[] = [];
+    public defaultDirection: string = '';
+    public words: Map <string,string> = new Map(); //direction -> word
     public rotation: number = 0;
 }

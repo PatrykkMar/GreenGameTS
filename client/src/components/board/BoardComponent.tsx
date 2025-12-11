@@ -1,20 +1,41 @@
 import TileComponent from "./TileComponent";
 import InputBoxComponent from "./InputBoxComponent";
 import "./board.css"
+import { useEffect, useState } from "react";
+import { clientSocket } from "../../socket";
+import type Board from "@shared/models/Board";
 
 export default function BoardComponent() {
-  const tilesData = [
-    { top: "G1", bottom: "D1", left: "L1", right: "P1" },
-    { top: "G2", bottom: "D2", left: "L2", right: "P2" },
-    { top: "G3", bottom: "D3", left: "L3", right: "P3" },
-    { top: "G4", bottom: "D4", left: "L4", right: "P4" },
-  ];
+
+  const [board, setBoard] = useState<Board>({
+    boardTiles: [],
+    inputs: ["", "", "", ""],
+  });
+
+  
+      useEffect(() => {
+          const handleBoard = (board: Board) => {
+            setBoard(board);
+          };
+
+          clientSocket.onBoard(handleBoard);
+  
+          clientSocket.requestBoard().then(res => {
+              if (res.ok && res.data) {
+                  setBoard(res.data);
+              }
+          });
+
+          return () => {
+              clientSocket.offBoard(handleBoard);
+          };
+      }, []);
 
   return (
     <div className="container text-center">
       <div className="container-box">
-        {tilesData.map((tile, index) => (
-          <TileComponent key={index} labels={tile} />
+        {board.boardTiles.map((tile, index) => (
+          <TileComponent key={index} boardTile={tile} />
         ))}
 
         <InputBoxComponent position="top" placeholder="Tekst" />
