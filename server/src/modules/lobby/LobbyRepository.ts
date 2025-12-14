@@ -15,15 +15,6 @@ export default class LobbyRepository {
     return [...this.lobbies.values()].find(lobby => lobby.users.has(userId));
   }
 
-  getLobbyContainingUser(userId: string): Lobby | undefined {
-    for (const lobby of this.lobbies.values()) {
-      if (lobby.users.has(userId)) {
-        return lobby;
-      }
-    }
-    return undefined;
-  }
-
   createLobby(id: string): Lobby {
     const lobby = new Lobby(id);
     this.lobbies.set(id, lobby);
