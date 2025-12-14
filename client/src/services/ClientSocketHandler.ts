@@ -2,7 +2,7 @@ import type { BaseResponse } from "@shared/models/Responses";
 import { Socket } from "socket.io-client";
 import type { SystemMessage } from "@shared/models/SystemMessage";
 import Board from "@shared/models/Board";
-
+import type { CreateLobbyRequest, JoinLobbyRequest} from "@shared/models/Requests";;
 export default class ClientSocketHandler {
     private socket: Socket;
 
@@ -33,15 +33,15 @@ export default class ClientSocketHandler {
         this.socket.connect();
     }
 
-    createLobby(id: string, nick: string): Promise<BaseResponse> {
+    createLobby(lobbyId: string, nick: string): Promise<BaseResponse> {
         return new Promise(resolve => {
-            this.socket.emit("createLobby", { id, nick }, resolve);
+            this.socket.emit("createLobby", { lobbyId, nick } as CreateLobbyRequest, resolve);
         });
     }
 
     joinLobby(lobbyId: string, nick: string): Promise<BaseResponse> {
         return new Promise(resolve => {
-            this.socket.emit("joinLobby", { id: lobbyId, nick }, resolve);
+            this.socket.emit("joinLobby", { lobbyId, nick }  as JoinLobbyRequest, resolve);
         });
     }
 
