@@ -1,7 +1,18 @@
 import { io, Socket } from "socket.io-client";
 import ClientSocketHandler from "./services/ClientSocketHandler";
 
-const socket: Socket = io();
-export const clientSocket = new ClientSocketHandler(socket);
+console.log("Environment: " + import.meta.env.MODE);
 
-export default socket;
+const BACKEND_URL =
+    import.meta.env.MODE === "development"
+        ? "http://localhost:3000"
+        : undefined;
+
+const socket: Socket = io(BACKEND_URL, {
+    transports: ["websocket", "polling"],
+    autoConnect: false,
+});
+
+const clientSocket = new ClientSocketHandler(socket);
+clientSocket.init();
+export default clientSocket;

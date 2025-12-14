@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { clientSocket } from "../socket";
+
 import SystemMessageWindow from "../components/SystemMessageWindow";
 import UsersList from "../components/UsersList";
 import BoardComponent from "../components/board/BoardComponent";
+import clientSocket from "../socket";
 
 export default function Game() {
     const { lobbyId } = useParams();

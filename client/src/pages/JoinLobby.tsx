@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { clientSocket } from "../socket";
 import type { 
     BaseResponse
 } from "@shared/models/Responses";
+import clientSocket from "../socket";
 
 export default function JoinLobby() {
     const [lobbyId, setLobbyId] = useState("");

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { clientSocket } from "../socket";
+import clientSocket from "../socket";
+
 
 export default function UsersList() {
     const [users, setUsers] = useState<string[]>([]);

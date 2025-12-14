@@ -29,6 +29,9 @@ export default class ServerSocketHandler {
     }
 
     private onConnection(socket: Socket) {
+
+        console.log(`[ServerSocketHandler] Client connected: ${socket.id}`);
+
         socket.on("createLobby", (data: CreateLobbyRequest, cb: (res: BaseResponse) => void) => {
             console.log("[ServerSocketHandler] createLobby requested");
             this.createLobby(socket, data, cb);
@@ -129,7 +132,7 @@ export default class ServerSocketHandler {
         cb(res);
     }
 
-    private getBoard(socket: Socket, request: GetUserListRequest, cb: (res: BaseResponse<Board>) => void) {
+    private getBoard(socket: Socket, request: GetBoardRequest, cb: (res: BaseResponse<Board>) => void) {
         const res = this.gameService.getBoard(socket.id);
         cb(res);
     }

@@ -2,8 +2,8 @@ import TileComponent from "./TileComponent";
 import InputBoxComponent from "./InputBoxComponent";
 import "./board.css"
 import { useEffect, useState } from "react";
-import { clientSocket } from "../../socket";
 import type Board from "@shared/models/Board";
+import clientSocket from "../../socket";
 
 export default function BoardComponent() {
 

@@ -10,6 +10,29 @@ export default class ClientSocketHandler {
         this.socket = socket;
     }
 
+
+    //basic events
+    init() {
+        console.log("Connecting to socket server...");
+        this.socket.on("connect", () => {
+            console.log("Connected to server", this.socket.id);
+        });
+
+        this.socket.on("disconnect", (reason) => {
+            console.log("Disconnected:", reason);
+        });
+
+        this.socket.on("connect_error", (err) => {
+            console.error("Connection error:", err.message);
+        });
+
+        this.socket.on("reconnect_attempt", (attempt) => {
+            console.log(`Reconnecting... attempt ${attempt}`);
+        });
+
+        this.socket.connect();
+    }
+
     createLobby(id: string, nick: string): Promise<BaseResponse> {
         return new Promise(resolve => {
             this.socket.emit("createLobby", { id, nick }, resolve);
@@ -68,9 +91,9 @@ export default class ClientSocketHandler {
     }
 
     onBoard(handler: (board: Board) => void): void {
-        this.socket.on("lobbyUsers", handler);
+        this.socket.on("board", handler);
     }
     offBoard(handler: (board: Board) => void): void {
-        this.socket.off("lobbyUsers", handler);
+        this.socket.off("board", handler);
     }
 }
