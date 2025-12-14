@@ -1,13 +1,12 @@
-import { WordGroup } from '@shared/models/WordGroup';
+import WordGroup from '@shared/models/WordGroup';
 import fs from 'fs';
 import path from 'path';
 import { injectable } from 'tsyringe';
 
 @injectable()
-export class WordsGroupService {
+export class WordsGroupRepository {
   private wordGroups: WordGroup[] = [];
-
-  constructor(private jsonFilePath: string = path.join(__dirname, 'wordGroups.json')) {}
+  private jsonFilePath: string = path.join(__dirname, 'wordGroups.json')
 
   loadWordGroups(): void {
     try {
@@ -21,8 +20,8 @@ export class WordsGroupService {
 
   getRandomGroups(amount: number): WordGroup[] {
     if (this.wordGroups.length === 0) {
-      console.warn('[WordGroupsService] No word groups loaded yet.');
-      return [];
+      console.log('[WordGroupsService] No word groups loaded yet');
+      this.loadWordGroups();
     }
 
     const result: WordGroup[] = [];

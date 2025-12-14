@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { clientSocket } from "../socket";
+
 import SystemMessageWindow from "../components/SystemMessageWindow";
 import UsersList from "../components/UsersList";
-import Board from "../components/board/Board";
+import BoardComponent from "../components/board/BoardComponent";
+import clientSocket from "../socket";
 
 export default function Game() {
     const { lobbyId } = useParams();
@@ -28,7 +29,7 @@ export default function Game() {
                 </button>
             </div>
             <div className="p-8">
-                <Board
+                <BoardComponent
 
                 />
             </div>
