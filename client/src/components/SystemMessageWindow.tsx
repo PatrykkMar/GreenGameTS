@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { SystemMessage } from "@shared/models/SystemMessage";
-import { clientSocket } from "../socket";
+import clientSocket from "../socket";
+
 
 export default function SystemMessageWindow() {
     const [messages, setMessages] = useState<SystemMessage[]>([]);
