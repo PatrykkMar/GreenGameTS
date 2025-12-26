@@ -1,19 +1,19 @@
-.container-box {
-  width: 80vw;
+.board {
+  width: 180vmin;
   max-width: 500px;
   aspect-ratio: 1;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 5%;
-  position: relative;
+  gap: 1%;
   background-color: #e6f2e6;
 }
 
 .tile {
   background-color: #144d6f;
-  position: relative; 
+  position: relative;
+  border-radius: 6px;
 }
 
 .tile-label {
@@ -22,73 +22,31 @@
   font-weight: bold;
   font-size: 0.8rem;
   text-align: center;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 .tile-label.top {
-  top: 5%;
+  top: 6%;
   left: 50%;
-  transform: translateX(-50%);
-}
-
-.tile-label.bottom {
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.tile-label.left {
-  top: 50%;
-  left: 5%;
-  transform: translateY(-50%);
+  transform: translateX(-50%) rotate(0deg);
 }
 
 .tile-label.right {
+  right: 6%;
   top: 50%;
-  right: 5%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) rotate(90deg);
 }
 
-.input-box {
-  position: absolute;
-  background-color: red;
-  color: white;
-  border: none;
-  text-align: center;
-  font-weight: bold;
-  z-index: 10; 
-}
-
-.input-box.top {
-  top: -5%;
+.tile-label.bottom {
+  bottom: 6%;
   left: 50%;
-  transform: translateX(-50%);
-  width: 40%;
+  transform: translateX(-50%) rotate(180deg);
 }
 
-.input-box.bottom {
-  bottom: -5%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40%;
-}
-
-.input-box.left {
+.tile-label.left {
+  left: 6%;
   top: 50%;
-  left: -5%;
-  transform: translateY(-50%);
-  width: 30%;
-}
-
-.input-box.right {
-  top: 50%;
-  right: -5%;
-  transform: translateY(-50%);
-  width: 30%;
-}
-
-.ready-btn {
-  margin-top: 20px;
+  transform: translateY(-50%) rotate(-90deg);
 }
 
 .rotate-btn {
@@ -96,28 +54,56 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  width: 36px;
+  height: 36px;
+
   border: none;
+  border-radius: 8px;
+
   background-color: #ff9800;
   color: white;
-  font-weight: bold;
-  padding: 5px 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   cursor: pointer;
-  border-radius: 5px;
-  transition: transform 0.3s ease; 
 }
 
-@media (max-width: 400px) {
-  .input-box.top,
-  .input-box.bottom {
-    width: 50%;
-  }
+.input-box {
+  background-color: red;
+  color: white;
+  border: none;
+  text-align: center;
+  font-weight: bold;
+  padding-block: 4px;
+  padding-inline: 4px;
+}
 
-  .input-box.left,
-  .input-box.right {
-    width: 35%;
-  }
+.input-box.top {
+  writing-mode: horizontal-tb;
+}
 
-  .tile-label {
-    font-size: 0.7rem;
-  }
+.input-box.bottom {
+  writing-mode: horizontal-tb;
+  transform: rotate(180deg);
+}
+
+.input-box.left {
+  transform: rotate(180deg);
+  writing-mode: vertical-rl;
+}
+
+.input-box.right {
+  writing-mode: vertical-rl;
+}
+
+.middle-row {
+  display: flex;
+  align-items: center; 
+}
+
+.ready-btn {
+  margin-top: 20px;
 }
