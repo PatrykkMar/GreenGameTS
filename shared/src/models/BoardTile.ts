@@ -1,6 +1,5 @@
 export default class BoardTile
 {
-    public defaultDirection: string = '';
-    public words: Map <string,string> = new Map(); //direction -> word
+    public words: string[] = [];
     public rotation: number = 0;
 }

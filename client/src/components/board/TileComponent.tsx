@@ -1,5 +1,4 @@
 import type BoardTile from "@shared/models/BoardTile";
-import Directions from "@shared/models/Directions";
 import  { useState } from "react";
 
 interface TileProps {
@@ -15,10 +14,10 @@ export default function TileComponent({ boardTile }: TileProps) {
 
   return (
     <div className="tile">
-      <label className="tile-label top">{boardTile.words.get(Directions.Top)}</label>
-      <label className="tile-label bottom">{boardTile.words.get(Directions.Bottom)}</label>
-      <label className="tile-label left">{boardTile.words.get(Directions.Left)}</label>
-      <label className="tile-label right">{boardTile.words.get(Directions.Right)}</label>
+      <label className="tile-label top">{boardTile.words[0]}</label>
+      <label className="tile-label bottom">{boardTile.words[1]}</label>
+      <label className="tile-label left">{boardTile.words[2]}</label>
+      <label className="tile-label right">{boardTile.words[3]}</label>
 
       <button
         className="rotate-btn"
