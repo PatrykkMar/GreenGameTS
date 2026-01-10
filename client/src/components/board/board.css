@@ -25,6 +25,10 @@
   pointer-events: none;
 }
 
+.boardWrapper {
+  position: relative;
+}
+
 .tile-label.top {
   top: 6%;
   left: 50%;

@@ -11,12 +11,35 @@ export default function BoardComponent() {
     inputs: ["", "", "", ""],
   });
 
+  const [rotation, setRotation] = useState(0);
+
+  const rotateBoard = () => {
+    setRotation((prev) => (prev + 90) % 360);
+  };
+
+  type InputPosition = "top" | "bottom" | "left" | "right";
+
+    const focusRotationMap: Record<InputPosition, number> = {
+      top: 0,
+      right: 270,
+      bottom: 180,
+      left: 90,
+    };
+
+    const handleInputFocus = (position: InputPosition) => {
+      const targetRotation = focusRotationMap[position];
+      setRotation((current) =>
+        current === targetRotation ? current : targetRotation
+      );
+    };
+
   useEffect(() => {
     const handleBoard = (board: Board) => {
       setBoard(board);
     };
 
     clientSocket.onBoard(handleBoard);
+
 
     clientSocket.requestBoard().then(res => {
       if (res.ok && res.data) {
@@ -31,18 +54,24 @@ export default function BoardComponent() {
 
   return (
     <div className="container text-center">
-      <div className="boardRotator">
-        <InputBoxComponent position="top" placeholder="Tekst" />
+      <div className="boardRotator" style={{ transform: `rotate(${rotation}deg)` }}>
+        <InputBoxComponent position="top" placeholder="Tekst" onFocus={handleInputFocus} />
         <div className="middle-row">
-          <InputBoxComponent position="left" placeholder="Tekst" />
+          <InputBoxComponent position="left" placeholder="Tekst" onFocus={handleInputFocus}/>
+          <div className="boardWrapper">
           <div className="board">
             {board.boardTiles.map((tile, index) => (
               <TileComponent key={index} boardTile={tile} />
             ))}
           </div>
-          <InputBoxComponent position="right" placeholder="Tekst" />
+
+          <button className="rotate-btn rotate-btn--center" onClick={rotateBoard}>
+            ⟳
+          </button>
         </div>
-        <InputBoxComponent position="bottom" placeholder="Tekst" />
+          <InputBoxComponent position="right" placeholder="Tekst" onFocus={handleInputFocus} />
+        </div>
+        <InputBoxComponent position="bottom" placeholder="Tekst"  />
       </div>
 
       <button className="ready-btn">READY</button>
