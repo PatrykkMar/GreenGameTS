@@ -87,19 +87,23 @@
 
 .input-box.top {
   writing-mode: horizontal-tb;
+  width: 50%;
 }
 
 .input-box.bottom {
   writing-mode: horizontal-tb;
   transform: rotate(180deg);
+  width: 50%;
 }
 
 .input-box.left {
+  height: 25%;
   transform: rotate(180deg);
   writing-mode: vertical-rl;
 }
 
 .input-box.right {
+  height: 25%;
   writing-mode: vertical-rl;
 }
 

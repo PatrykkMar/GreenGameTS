@@ -1,16 +1,16 @@
 import type BoardTile from "@shared/models/BoardTile";
-import { useState } from "react";
+//import { useState } from "react";
 
 interface TileProps {
   boardTile: BoardTile;
 }
 
 export default function TileComponent({ boardTile }: TileProps) {
-  const [rotation, setRotation] = useState(0);
-
-  const handleRotate = () => {
-    setRotation(prev => prev + 90);
-  };
+  //const [rotation, setRotation] = useState(0);
+  //TODO: Rotation for checking mode
+  //const handleRotate = () => {
+  //  setRotation(prev => prev + 90);
+  //};
 
   return (
     <div className="tile">
@@ -19,12 +19,15 @@ export default function TileComponent({ boardTile }: TileProps) {
       <label className="tile-label bottom">{boardTile.words[2]}</label>
       <label className="tile-label left">{boardTile.words[3]}</label>
 
+    {/*
       <button
         className="rotate-btn"
         onClick={handleRotate}
         style={{ transform: `translate(-50%, -50%) rotate(${rotation}deg)` }}
       >↻
       </button>
+    */}
     </div>
+
   );
 }
