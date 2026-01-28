@@ -1,8 +1,9 @@
+import type { InputPosition } from "@shared/models/Directions";
 
 interface InputBoxProps {
-  position: "top" | "bottom" | "left" | "right";
+  position: InputPosition
   placeholder?: string;
-  onFocus?: (position: "top" | "bottom" | "left" | "right") => void;
+  onFocus?: (position: InputPosition) => void;
 }
 
 export default function InputBoxComponent({ position, placeholder, onFocus }: InputBoxProps) {

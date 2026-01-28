@@ -4,6 +4,7 @@ import "./board.css";
 import { useEffect, useState } from "react";
 import type Board from "@shared/models/Board";
 import clientSocket from "../../socket";
+import type { InputPosition } from "@shared/models/Directions";
 
 export default function BoardComponent() {
   const [board, setBoard] = useState<Board>({
@@ -16,9 +17,6 @@ export default function BoardComponent() {
   const rotateBoard = () => {
     setRotation((prev) => (prev + 90) % 360);
   };
-
-  type InputPosition = "top" | "bottom" | "left" | "right";
-
     const positionToRotationLevel: Record<InputPosition, number> = {
       top: 0,
       right: 3,
