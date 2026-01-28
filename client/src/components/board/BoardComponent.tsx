@@ -19,18 +19,18 @@ export default function BoardComponent() {
 
   type InputPosition = "top" | "bottom" | "left" | "right";
 
-    const focusRotationMap: Record<InputPosition, number> = {
+    const positionToRotationLevel: Record<InputPosition, number> = {
       top: 0,
-      right: 270,
-      bottom: 180,
-      left: 90,
+      right: 3,
+      bottom: 2,
+      left: 1,
     };
 
     const handleInputFocus = (position: InputPosition) => {
-      const targetRotation = focusRotationMap[position];
-      setRotation((current) =>
-        current === targetRotation ? current : targetRotation
-      );
+      const targetRotationLevel: number = positionToRotationLevel[position];
+      console.log(position);
+      console.log(targetRotationLevel);
+      setRotation(targetRotationLevel * 90);
     };
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function BoardComponent() {
         </div>
           <InputBoxComponent position="right" placeholder="Tekst" onFocus={handleInputFocus} />
         </div>
-        <InputBoxComponent position="bottom" placeholder="Tekst"  />
+        <InputBoxComponent position="bottom" placeholder="Tekst" onFocus={handleInputFocus}   />
       </div>
 
       <button className="ready-btn">READY</button>

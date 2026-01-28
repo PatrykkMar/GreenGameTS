@@ -16,3 +16,5 @@ const socket: Socket = io(BACKEND_URL, {
 const clientSocket = new ClientSocketHandler(socket);
 clientSocket.init();
 export default clientSocket;
+
+//TODO: Refactor
