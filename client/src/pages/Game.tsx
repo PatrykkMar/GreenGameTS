@@ -22,16 +22,14 @@ export default function Game() {
                 <SystemMessageWindow  />
             </div>
 
-            <div style={{ width: "200px" }}>
+            <div>
                 <UsersList />
                 <button className="btn btn-outline-danger mb-3" onClick={leaveLobby}>
                     Leave lobby
                 </button>
             </div>
-            <div className="p-8">
-                <BoardComponent
-
-                />
+            <div>
+                <BoardComponent/>
             </div>
         </div>
     );

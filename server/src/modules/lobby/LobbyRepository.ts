@@ -1,8 +1,8 @@
-import { injectable } from "tsyringe";
+import { injectable, singleton } from "tsyringe";
 import Lobby from "./Lobby";
 import GameFactory from "../game/GameFactory";
 
-@injectable()
+@singleton()
 export default class LobbyRepository {
 
   lobbies: Map<string, Lobby> = new Map();
@@ -12,13 +12,11 @@ export default class LobbyRepository {
   }
 
   getLobbyWithUser(userId: string): Lobby | undefined {
-    return [...this.lobbies.values()].find(lobby => lobby.users.has(userId));
-  }
-
-  getLobbyContainingUser(userId: string): Lobby | undefined {
     for (const lobby of this.lobbies.values()) {
-      if (lobby.users.has(userId)) {
-        return lobby;
+      for (const user of lobby.users.values()) {
+        if (user.id === userId) {
+          return lobby;
+        }
       }
     }
     return undefined;

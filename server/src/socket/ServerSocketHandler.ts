@@ -32,6 +32,8 @@ export default class ServerSocketHandler {
 
         console.log(`[ServerSocketHandler] Client connected: ${socket.id}`);
 
+        //lobby actions
+
         socket.on("createLobby", (data: CreateLobbyRequest, cb: (res: BaseResponse) => void) => {
             console.log("[ServerSocketHandler] createLobby requested");
             this.createLobby(socket, data, cb);
@@ -47,6 +49,8 @@ export default class ServerSocketHandler {
             this.leaveLobby(socket, data, cb);
         });
 
+        //component requests
+
         socket.on("requestMessages", (data: GetMessagesRequest, cb: (res: BaseResponse<SystemMessage[]>) => void) => {
             console.log("[ServerSocketHandler] requestMessages requested");
             this.getMessages(socket, data, cb);
@@ -61,6 +65,8 @@ export default class ServerSocketHandler {
             console.log("[ServerSocketHandler] requestBoard requested");
             this.getBoard(socket, data, cb);
         });
+        
+        //gane requests
 
         socket.on("declareReady", (data: DeclareReadyRequest, cb: (res: BaseResponse<Board>) => void) => {
             console.log("[ServerSocketHandler] declareReady requested");
