@@ -64,4 +64,18 @@ export default class LobbyService {
 
         return { ok: true, data: lobby.getUsersList() };
     }
+
+    getLobbyIdByUserId(userId: string): string | undefined {
+        return this.lobbyManager.getLobbyWithUser(userId)?.id;
+    }
+
+    getLobbyData(lobbyId: string): { users: string[], messages: SystemMessage[] } | null {
+        const lobby = this.lobbyManager.getLobby(lobbyId);
+        if (!lobby) return null;
+
+        return {
+            users: lobby.getUsersList(),
+            messages: Array.from(lobby.messages)
+        };
+    }
 }

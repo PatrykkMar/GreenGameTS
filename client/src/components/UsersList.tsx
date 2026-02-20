@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import clientSocket from "../socket";
+import { useSocket } from "../context/SocketContext";
 
 
 export default function UsersList() {
     const [users, setUsers] = useState<string[]>([]);
-
+    const clientSocket = useSocket();
     useEffect(() => {
         clientSocket.requestUserList().then(res => {
             if (res.ok && res.data) {
