@@ -69,18 +69,11 @@ export default class ClientSocketHandler {
         });
     }
 
-    onSystemMesages(handler: (systemMsg: SystemMessage) => void): void {
+    onSystemMesages(handler: (systemMsg: SystemMessage[]) => void): void {
         this.socket.on("systemMsg", handler);
     }
-    offSystemMessages(handler: (systemMsg: SystemMessage) => void): void {
+    offSystemMessages(handler: (systemMsg: SystemMessage[]) => void): void {
         this.socket.off("systemMsg", handler);
-    }
-
-    onHistory(handler: (messages: SystemMessage[]) => void): void {
-        this.socket.on("history", handler);
-    }
-    offHistory(handler: (messages: SystemMessage[]) => void): void {
-        this.socket.off("history", handler);
     }
 
     onUsers(handler: (users: string[]) => void): void {

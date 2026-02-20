@@ -3,8 +3,8 @@ import InputBoxComponent from "./InputBoxComponent";
 import "./board.css";
 import { useEffect, useState } from "react";
 import type Board from "@shared/models/Board";
-import clientSocket from "../../socket";
 import type { InputPosition } from "@shared/models/Directions";
+import { useSocket } from "../../context/SocketContext";
 
 export default function BoardComponent() {
   const [board, setBoard] = useState<Board>({
@@ -13,6 +13,8 @@ export default function BoardComponent() {
   });
 
   const [rotation, setRotation] = useState(0);
+  
+  const clientSocket = useSocket();
 
   const rotateBoard = () => {
     setRotation((prev) => (prev + 90) % 360);

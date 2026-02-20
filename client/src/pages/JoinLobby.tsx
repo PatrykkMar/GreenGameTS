@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom";
 import type { 
     BaseResponse
 } from "@shared/models/Responses";
-import clientSocket from "../socket";
+import { useSocket } from "../context/SocketContext";
 
 export default function JoinLobby() {
     const [lobbyId, setLobbyId] = useState("");
     const [nick, setNick] = useState("");
     
     const navigate = useNavigate();
+    const clientSocket = useSocket();
 
     function storeNick() {
         sessionStorage.setItem(`nick_${lobbyId}`, nick);
