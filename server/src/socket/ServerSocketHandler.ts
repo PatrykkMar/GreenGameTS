@@ -99,13 +99,22 @@ export default class ServerSocketHandler {
 
     private joinLobby(socket: Socket, { lobbyId, nick }: JoinLobbyRequest, cb: (res: BaseResponse) => void) {
         const res = this.lobbyService.joinLobby(lobbyId, socket.id, nick);
-        if (res.ok) socket.join(lobbyId);
+        if (res.ok) {
+            socket.join(lobbyId);
+            this.updateRoom(lobbyId);
+        }
         cb(res);
     }
 
     private leaveLobby(socket: Socket, request: LeaveLobbyRequest, cb: (res: BaseResponse) => void) {
+        const lobbyId = this.lobbyService.getLobbyIdByUserId(socket.id);
+        
         const res = this.lobbyService.leaveLobby(socket.id);
-        socket.leave(socket.id);
+        
+        if (res.ok && lobbyId) {
+            socket.leave(lobbyId);
+            this.updateRoom(lobbyId);
+        }
         cb(res);
     }
 
@@ -145,7 +154,22 @@ export default class ServerSocketHandler {
 
     // Other
 
+    private updateRoom(lobbyId: string) {
+        const data = this.lobbyService.getLobbyData(lobbyId);
+        
+        if (data) {
+            console.log(`[ServerSocketHandler] Broadcasting update to room: ${lobbyId}`);
+            this.io.to(lobbyId).emit("systemMsg", data.messages);
+            this.io.to(lobbyId).emit("lobbyUsers", data.users);
+        }
+    }
+
     private disconnect(socket: Socket) {
+        const lobbyId = this.lobbyService.getLobbyIdByUserId(socket.id);
         this.lobbyService.leaveLobby(socket.id);
+        
+        if (lobbyId) {
+            this.updateRoom(lobbyId);
+        }
     }
 }

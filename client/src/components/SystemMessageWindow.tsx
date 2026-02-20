@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import type { SystemMessage } from "@shared/models/SystemMessage";
-import clientSocket from "../socket";
+import { useSocket } from "../context/SocketContext";
 
 
 export default function SystemMessageWindow() {
     const [messages, setMessages] = useState<SystemMessage[]>([]);
     const endRef = useRef<HTMLDivElement | null>(null);
-
+    const clientSocket = useSocket();
     useEffect(() => {
         clientSocket.requestMessages().then(res => {
             if (res.ok && res.data) {
@@ -14,8 +14,8 @@ export default function SystemMessageWindow() {
             }
         });
 
-        const handleSystemMessages = (msg: SystemMessage) => {
-            setMessages(prev => [...prev, msg]);
+        const handleSystemMessages = (msg: SystemMessage[]) => {
+            setMessages(msg);
         };
 
         clientSocket.onSystemMesages(handleSystemMessages);
